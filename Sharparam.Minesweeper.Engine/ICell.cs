@@ -3,7 +3,10 @@
     public interface ICell
     {
         bool IsMine { get; }
-        State State { get; set; }
+        bool IsFlagged { get; }
+        bool IsMarked { get; }
+        bool IsEmpty { get; }
+        State State { get; }
 
         int X { get; }
         int Y { get; }

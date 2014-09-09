@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Text;
     using System.Text.RegularExpressions;
 
@@ -10,6 +11,12 @@
     public class Program
     {
         private const char MineChar = 'X';
+
+        private const char CellSeparator = ' ';
+
+        private const char FieldCorner = ' ';
+
+        private const char CornerConnector = ' ';
 
         private static readonly Dictionary<State, char> StateMapping = new Dictionary<State, char>
         {
@@ -28,14 +35,14 @@
 
         internal static void Main(string[] args)
         {
-            new Program().Run();
+            while (true) new Program().Run();
         }
 
         public void Run()
         {
-            _cells = new CellCollection(6, 4);
+            _cells = new CellCollection(12, 9);
 
-            var leftPadding = new string(' ', _cells.Width.ToString().Length + 3);
+            var leftPadding = new string(' ', _cells.Height.ToString(CultureInfo.InvariantCulture).Length + 3);
 
             var fieldWidth = _cells.Width * 4 + 1;
 
@@ -54,9 +61,9 @@
             for (var i = 0; i < fieldWidth; i++)
             {
                 if (i % 2 == 0 && i % 4 == 0)
-                    rowSeparatorBuilder.Append('+');
+                    rowSeparatorBuilder.Append(FieldCorner);
                 else
-                    rowSeparatorBuilder.Append('-');
+                    rowSeparatorBuilder.Append(CornerConnector);
             }
 
             _rowSeparator = leftPadding + rowSeparatorBuilder;
@@ -92,7 +99,7 @@
                         {
                             Console.WriteLine("Invalid index.");
                         }
-                        else
+                        else if (_cells[x, y].State != State.Shown)
                         {
                             if (mode.Success)
                             {
@@ -110,7 +117,19 @@
                                 }
                             }
                             else
-                                _cells.Show(x, y);
+                            {
+                                var cell = _cells[x, y];
+                                if (cell.IsMarked || cell.IsFlagged)
+                                    continue;
+                                if (cell.IsMine)
+                                {
+                                    _cells.ShowAll();
+                                    PrintField();
+                                    running = false;
+                                }
+                                else
+                                    _cells.Show(x, y);
+                            }
                         }
                     }
                     else
@@ -122,12 +141,14 @@
         private void PrintField()
         {
             Console.WriteLine();
+            Console.WriteLine("{0} cells, {1} mines, {2} left to discover", _cells.CellCount, _cells.MineCount, _cells.MineCount - _cells.Flagged);
+            Console.WriteLine();
             Console.WriteLine(_colHeaders);
             Console.WriteLine(_rowSeparator);
 
             for (var row = 0; row < _cells.Height; row++)
             {
-                Console.Write("{0,3} |", row + 1);
+                Console.Write("{0,3} {1}", row + 1, CellSeparator);
                 for (var col = 0; col < _cells.Width; col++)
                 {
                     var square = _cells[col, row];
@@ -143,7 +164,7 @@
                     }
                     else
                         Console.Write(StateMapping[square.State]);
-                    Console.Write(" |");
+                    Console.Write(" {0}", CellSeparator);
                 }
                 Console.WriteLine();
                 Console.WriteLine(_rowSeparator);
