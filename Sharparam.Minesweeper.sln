@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharparam.Minesweeper.Engine", "Sharparam.Minesweeper.Engine\Sharparam.Minesweeper.Engine.csproj", "{A5F0953C-D552-4F82-B327-57C055032DD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharparam.Minesweeper.Cli", "Sharparam.Minesweeper.Console\Sharparam.Minesweeper.Cli.csproj", "{6E4DD61E-3985-4829-A31C-84EBCB233D1F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharparam.Minesweeper.Cli", "Sharparam.Minesweeper.Cli\Sharparam.Minesweeper.Cli.csproj", "{6E4DD61E-3985-4829-A31C-84EBCB233D1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
