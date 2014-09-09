@@ -60,7 +60,24 @@
 
         public void Show(int x, int y)
         {
-            this[x, y].State = State.Shown;
+            var cell = this[x, y];
+
+            cell.State = State.Shown;
+
+            // Call Show on neighboring cells that are currently hidden and
+            // are not mines
+            for (var i = x - 1; i < x + 1; i++)
+            {
+                for (var j = y - 1; j < y + 1; j++)
+                {
+                    if ((i == x && j == y) || i < 0 || i >= Width || j < 0 || j >= Height)
+                        continue;
+
+                    var neighbor = this[i, j];
+                    if (neighbor.State == State.Hidden && !neighbor.IsMine)
+                        Show(i, j);
+                }
+            }
         }
 
         IEnumerator<ICell> IEnumerable<ICell>.GetEnumerator()
